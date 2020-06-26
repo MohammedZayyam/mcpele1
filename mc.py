@@ -1,48 +1,50 @@
 import abc
+from abc import ABC, abstractmethod
 import numpy as np
 from typing import List
 import typing
 from typing import Generic, TypeVar, NewType
 import math
+#from check_spherical_container import *
 
 T = TypeVar('T')
-class Action(abc.ABCMeta, Generic[T]):  
+class Action(ABC, Generic[T]):  
     def action(self, coords: np.ndarray, energy: float, accepted: bool):
         return None
 
-class AcceptTest(abc.ABCMeta):
+class AcceptTest(ABC):
     def test(self,  trialcoords: np.ndarray, energy: float, old_coords: np.ndarray, old_energy: float, temperature: float) -> bool:
         return None
 
-class ConfTest(abc.ABCMeta):
+class ConfTest(ABC):
+    @abc.abstractmethod
     def conf_test(self, trial_coords: np.ndarray):
         return None
 
 
-class TakeStep(abc.ABCMeta):#define all the functions
-
-    @abc.abstractclassmethod
+class TakeStep(ABC):#define all the function
+    @abc.abstractmethod 
     def displace(self, coords: np.ndarray):
         return None
     
-    @abc.abstractclassmethod
+    @abc.abstractmethod 
     def report(self, old_coords: np.ndarray, old_energy: float, new_coords: np.ndarray, new_energy: float,
     success: bool):
         return None
 
-    @abc.abstractclassmethod    
+    @abc.abstractmethod   
     def increase_acceptance(self):
         return None
     
-    @abc.abstractclassmethod
+    @abc.abstractmethod 
     def decrease_acceptance(self):
         return None
 
-    @abc.abstractclassmethod
+    @abc.abstractmethod 
     def get_changed_atoms(self) -> List[int]:
         return List[int]
     
-    @abc.abstractclassmethod
+    @abc.abstractmethod 
     def get_changed_coords_old(self) -> np.ndarray:
         return np.ndarray
 
@@ -52,7 +54,7 @@ size_t = NewType('size_t', int)
 Base_Potential = NewType('Base_Potential', float)
 
 
-class MC(abc.ABCMeta):
+class MC(ABC):
     def __init__(self, potential: Base_Potential, coords, temperature: float):
         self.m_potential = potential
         self.m_coords = coords
@@ -78,17 +80,44 @@ class MC(abc.ABCMeta):
     m_niter: size_t = 0
     m_neval: size_t = 0
     m_temperature: float = None
-    m_energy: float = None
-    m_trial_energy: float = None
+    m_energy: float = None # compute_energy(m_coords)
+    m_trial_energy: float = None # m_energy
     #private variables
     m_report_steps: size_t = 0  
     m_enable_input_warnings: bool = True
     counters: List[size_t] = None
     #public methods
-x
-    @abc.abstractmethod
     def one_iteration(self):
-        return None
+        self.m_success = True
+        self.m_niter = self.m_niter +1
+        self.m_nitercount = self.m_nitercount +1
+        self.m_trial_coords = m_coords
+        #takestep(m_trial_coords)
+        m_success = do_conf_test(m_trial_coords)
+        if(m_success):
+            #if configurtions test is successfull compute the trial energy
+            m_trial_energy = compute_energy(m_trial_energy)
+            #perform the acceptance test. Stop as one fails
+            m_success = do_accept_tests(m_trial_coords, m_trial_energy, m_coords, m_energy)
+        #do late configuration test to check the configuration is ok
+        if(m_success):
+            m_success = do_late_conf_test(m_trial_coords)
+        
+        if (get_iterations_count() <= m_report_steps):
+            report(m_coords, m_energy, m_trial_coords, m_trial_energy, m_success, this)
+
+        #if the step is accepted, copy the coordinates and energy
+        if (m_success):
+            m_coords.assign(m_trial_coords)
+            m_energy = m_trial_energy
+            m_accept_count= 1+ m_accept_count
+    
+        #perform the actions on the new configuration
+        self.do_actions(m_coords, m_energy, m_success)
+
+        self.m_last_success = m_success
+}
+
 
     @abc.abstractmethod 
     def run(self, max_iter: size_t):
@@ -263,6 +292,7 @@ x
     @abc.abstractclassmethod
     def compute_energy(self, x: np.ndarray) -> float:
         m_neval = m_neval +1
+        return None
     
     @abc.abstractclassmethod
     def do_conf_tests(self, x: np.ndarray) -> bool:
@@ -276,7 +306,6 @@ x
     def do_late_conf_test(self, x: np.ndarray) -> bool:
         return None
 
-    @abc.abstractclassmethod
     def do_actions(self, x: np.ndarray, energy: float, success: bool):
         return None
     

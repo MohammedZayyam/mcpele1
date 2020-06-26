@@ -7,6 +7,5 @@ class EnergyWindowTest(AcceptTest):
         self.min_energy = min_energy
         self.max_energy = max_energy
     
-    @abc.abstractclassmethod
-    def test(trial_coords, trial_energy: float, old_coords, old_energy:float, temperature: float) -> bool:
-        return None
+    def test(self, trial_energy: float, min_energy: float, max_energy: float) -> bool:
+        return ((trial_energy >= min_energy) and (trial_energy <= max_energy))

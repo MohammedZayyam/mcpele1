@@ -1,6 +1,7 @@
 from mc import *
 
-def CheckSphericalContainer(ConfTest):
+
+class CheckSphericalContainer(ConfTest):
     m_radius2: float = None
     m_ndim: size_t = None
     
@@ -9,14 +10,14 @@ def CheckSphericalContainer(ConfTest):
         self.m_ndim = ndim
         return None 
 
-    @abc.abstractclassmethod
-    def conf_test(trial_coords: np.ndarray) -> bool:
-        N: size_t = len(rial_coords)
+
+    def conf_test(self, trial_coords: np.ndarray) -> bool:
+        N: size_t = len(trial_coords)
         r2: float = 0
         i: size_t = 0
         while (i<N):
             j=i
-            while (j< i+m_ndim)
+            while (j< i+self.m_ndim):
                 r2 = r2 + trial_coords[j]*trial_coords[j]
                 j = j+1
             if (r2> m_radius2):
