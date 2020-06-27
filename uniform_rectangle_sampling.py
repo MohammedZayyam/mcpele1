@@ -23,7 +23,7 @@ class UniformRectangularSampling(TakeStep):
         dim = len(cls.m_boxvec)
         i =0
         k=0
-        while(i< nr_particle):
+        while(i< mr_particle):
             while(k< dim):
                 coords[i * dim + k] = cls.m_boxvec[k] * cls.m_dist05.seed(m_gen)
                 k+=1
