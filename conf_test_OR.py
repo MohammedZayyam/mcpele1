@@ -1,5 +1,5 @@
-from mc import *
-from check_spherical_container import *
+from template import *
+import check_spherical_container
 
 class ConfTestOR(ConfTest):
     m_tests: list = None
@@ -11,11 +11,11 @@ class ConfTestOR(ConfTest):
 
     @abc.abstractclassmethod
     def conf_test(self, trial_coords):
-        if (len(self.m_test) == 0 ):
+        if (len(self.m_tests) == 0 ):
             print("no conf test specified")
         i=0
-        while(i < len(self.m_test)) :
-            result: bool =  CheckSphericalContainer.conf_test(trial_coords)
+        while(i < len(self.m_tests)) :
+            result: bool =  check_spherical_container.conf_test(trial_coords)
             if(result):
                 return True
         return False

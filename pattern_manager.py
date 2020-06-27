@@ -1,5 +1,6 @@
-#incomplete
-from mc imoprt *
+#incomple
+from template import *
+from typing import NewType
 
 vec_t = NewType('vec_t', list)
 class PatternManager:
@@ -15,12 +16,11 @@ class PatternManager:
     def add(self, index_input, repetitions_input = 1):
         if (repetitions_input<1):
             print("error")
-            break
+            exit(0)
         new = [repetitions_input, index_input]
         self.m_step_repetitions.append(new)
         self.m_current_step_index = 0
-        x = self.m_step_repetitions[0]
-        self.m_current_step_count =x[0]
-        if(self.m_initialized =False):
+        self.m_current_step_count =self.m_step_repetitions[0][0]
+        if(self.m_initialized ==False):
             self.m_initialized = True
         

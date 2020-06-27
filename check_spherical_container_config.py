@@ -1,4 +1,4 @@
-from mc import *
+from template import *
 
 class CheckSphericalContainerConfig(ConfTest):
     #protected

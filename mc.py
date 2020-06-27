@@ -1,58 +1,7 @@
-import abc
-from abc import ABC, abstractmethod
-import numpy as np
-from typing import List
-import typing
-from typing import Generic, TypeVar, NewType
-import math
+from template import *
+from check_spherical_container import *
+from metropolis_test import *
 #from check_spherical_container import *
-
-T = TypeVar('T')
-class Action(ABC, Generic[T]):  
-    def action(self, coords: np.ndarray, energy: float, accepted: bool):
-        return None
-
-class AcceptTest(ABC):
-    def test(self,  trialcoords: np.ndarray, energy: float, old_coords: np.ndarray, old_energy: float, temperature: float) -> bool:
-        return None
-
-class ConfTest(ABC):
-    @abc.abstractmethod
-    def conf_test(self, trial_coords: np.ndarray):
-        return None
-
-
-class TakeStep(ABC):#define all the function
-    @abc.abstractmethod 
-    def displace(self, coords: np.ndarray):
-        return None
-    
-    @abc.abstractmethod 
-    def report(self, old_coords: np.ndarray, old_energy: float, new_coords: np.ndarray, new_energy: float,
-    success: bool):
-        return None
-
-    @abc.abstractmethod   
-    def increase_acceptance(self):
-        return None
-    
-    @abc.abstractmethod 
-    def decrease_acceptance(self):
-        return None
-
-    @abc.abstractmethod 
-    def get_changed_atoms(self) -> List[int]:
-        return List[int]
-    
-    @abc.abstractmethod 
-    def get_changed_coords_old(self) -> np.ndarray:
-        return np.ndarray
-
-#dataa types
-size_t = NewType('size_t', int)
-#function(Log likilyh)
-Base_Potential = NewType('Base_Potential', float)
-
 
 class MC(ABC):
     def __init__(self, potential: Base_Potential, coords, temperature: float):
@@ -62,8 +11,8 @@ class MC(ABC):
 
         #protected variables
     m_potential: Base_Potential = None
-    m_coords: np.ndarray = None
-    m_trial_coords: np.ndarray = None
+    m_coords= None
+    m_trial_coords= None
     m_actions: list = None
     m_accept_tests: list = None
     m_conf_tests: list = None
@@ -91,32 +40,33 @@ class MC(ABC):
         self.m_success = True
         self.m_niter = self.m_niter +1
         self.m_nitercount = self.m_nitercount +1
-        self.m_trial_coords = m_coords
+        self.m_trial_coords = self.m_coords
         #takestep(m_trial_coords)
-        m_success = do_conf_test(m_trial_coords)
-        if(m_success):
+
+        self.m_success=self.do_conf_tests(self.m_trial_coords)
+        #self.m_success  #self.do_conf_test(self.m_trial_coords)
+        if(self.m_success == True):
             #if configurtions test is successfull compute the trial energy
-            m_trial_energy = compute_energy(m_trial_energy)
+            self.m_trial_energym_trial_energy = self.compute_energy(self.m_trial_energy)
             #perform the acceptance test. Stop as one fails
-            m_success = do_accept_tests(m_trial_coords, m_trial_energy, m_coords, m_energy)
+            self.m_success = self.do_accept_tests(self.m_trial_coords, self.m_trial_energy, self.m_coords, self.m_energy)
         #do late configuration test to check the configuration is ok
-        if(m_success):
-            m_success = do_late_conf_test(m_trial_coords)
+        if(self.m_success):
+            self.m_success = self.do_late_conf_test(self.m_trial_coords)
         
-        if (get_iterations_count() <= m_report_steps):
-            report(m_coords, m_energy, m_trial_coords, m_trial_energy, m_success, this)
+        if (self.get_iterations_count() <= self.m_report_steps):
+            mt.report(self.m_coords, self.m_energy, self.m_trial_coords, self.m_trial_energy, self.m_success)
 
         #if the step is accepted, copy the coordinates and energy
-        if (m_success):
-            m_coords.assign(m_trial_coords)
-            m_energy = m_trial_energy
-            m_accept_count= 1+ m_accept_count
+        if (self.m_success):
+            self.m_coords.assign(self.m_trial_coords)
+            self.m_energy = self.m_trial_energy
+            self.m_accept_count= 1+ self.m_accept_count
     
         #perform the actions on the new configuration
-        self.do_actions(m_coords, m_energy, m_success)
+        self.do_actions(self.m_coords, self.m_energy, self.m_success)
 
-        self.m_last_success = m_success
-}
+        self.m_last_success = self.m_success
 
 
     @abc.abstractmethod 
@@ -141,19 +91,19 @@ class MC(ABC):
 
     @abc.abstractmethod 
     def add_action(self, action: list):
-        self._m_actions.append(action) 
+        self.m_actions.append(action) 
 
     @abc.abstractmethod  
     def add_accept_test(self, accept_test: list):
-        self._m_accept_tests.append(accept_test)
+        self.m_accept_tests.append(accept_test)
 
     @abc.abstractmethod 
     def add_conf_test(self, conf_test: list):
-        self._m_conf_tests.append(conf_test)
+        self.m_conf_tests.append(conf_test)
 
     @abc.abstractmethod 
     def add_late_conf_test(self, conf_test: list):
-        self._m_late_conf_tests.append(conf_test)
+        self.m_late_conf_tests.append(conf_test)
 
     @abc.abstractmethod 
     def set_take_step(self, takestep: float):
@@ -181,55 +131,55 @@ class MC(ABC):
 
     @abc.abstractmethod 
     def get_coords(self):
-        return self._m_coords
+        return self.m_coords
 
     @abc.abstractmethod 
     def get_trial_coords(self):
-        return self._m_trial_coords
+        return self.m_trial_coords
 
     @abc.abstractmethod 
     def get_norm_coords(self) -> float:
-        return (math.sqrt((self._m_coords)^2))
+        return (math.sqrt((self.m_coords)^2))
     
     @abc.abstractmethod 
     def get_naccept(self) -> size_t:
-        return m_accept_count
+        return self.m_accept_count
 
     @abc.abstractmethod 
     def get_nrehect(self) -> size_t:
-        return m_nitercount -m_accept_count
+        return self.m_nitercount -self.m_accept_count
     
     @abc.abstractmethod 
     def get_accepted_fraction(self) -> float:
-        return m_accept_count/m_nitercount
+        return self.m_accept_count/self.m_nitercount
 
     @abc.abstractmethod
     def get_conf_rejection_fraction(self) -> float:
-        return m_conf_reject_count/m_nitercount 
+        return self.m_conf_reject_count/self.m_nitercount 
 
     @abc.abstractmethod
     def get_E_rejection_fraction(self) -> float:
-        return m_E_reject_count/m_nitercount
+        return self.m_E_reject_count/self.m_nitercount
 
-    @abc.abstractclassmethod
+    @staticmethod
     def get_iterations_count(self) -> size_t:
-        return m_nitercount
+        return self.m_nitercount
     
     @abc.abstractclassmethod
     def get_neval(self) -> size_t:
-        return m_neval
+        return self.m_neval
 
     @abc.abstractclassmethod
     def get_potential_ptr(self) -> Base_Potential:
-        return m_potential
+        return self.m_potential
     
     @abc.abstractclassmethod
     def take_step_specified(self) -> bool:
-        return m_take_step != None
+        return self.m_take_step != None
 
     @abc.abstractclassmethod
     def report_steps_specified(self) -> bool:
-        return get_report_steps > 0
+        return self.get_report_steps > 0
     
     @abc.abstractclassmethod
     def check_input(self):
@@ -237,81 +187,109 @@ class MC(ABC):
     
     @abc.abstractclassmethod
     def set_print_progress(self, input: bool):
-        m_print_progress = input
+        self.m_print_progress = input
 
     @abc.abstractclassmethod
     def get_print_progress(self):
-        set_print_progress(true)
+        self.set_print_progress(True)
     
     @abc.abstractclassmethod
     def get_success(self) -> bool:
-        return m_success
+        return self.m_success
 
     @abc.abstractclassmethod
     def get_last_success(self) -> bool:
-        return m_get_last_success
+        return self.m_last_success
     
     @abc.abstractclassmethod
     def get_counter(self, counters: List[size_t]) -> List[size_t]:
-        counters[0] = m_nitercount
-        counters[1] = m_accept_count
-        counters[2] = m_E_reject_count
-        counters[3] = m_conf_reject_count
-        counters[4] = m_neval
+        counters[0] = self.m_nitercount
+        counters[1] = self.m_accept_count
+        counters[2] = self.m_E_reject_count
+        counters[3] = self.m_conf_reject_count
+        counters[4] = self.m_neval
         return counters
 
     @abc.abstractclassmethod
     def set_counters(self, counters: List[size_t]):
-        m_nitercount = counters[0]
-        m_accept_count = counter[1]
-        m_E_reject_count = counters[2]
-        c_conf_reject_count  = counters[3]
-        m_neval = counters[4]
+        self.m_nitercount = counters[0]
+        self.m_accept_count = counters[1]
+        self.m_E_reject_count = counters[2]
+        self.c_conf_reject_count  = counters[3]
+        self.m_neval = counters[4]
 
     @abc.abstractclassmethod
     def get_changed_atoms(self):
-        return  TakeStep.get_changed_atoms()
+        return  mt.get_changed_atoms()
 
     @abc.abstractclassmethod
     def get_changed_coords_old(self):
-        return TakeStep.get_changed_coords_old()
+        return mt.get_changed_coords_old()
     #not sure if we need these methods in python
     @abc.abstractclassmethod
     def abort(self):
-        m_niter = sys.maxsize
+        self.m_niter = sys.maxsize
 
     @abc.abstractclassmethod
     def enable_input_warnings(self):
-        m_enable_input_warnings = True
+        self.m_enable_input_warnings = True
     
     @abc.abstractclassmethod
     def disable_input_warning(self):
-        m_enable_input_warnings = False
+        self.m_enable_input_warnings = False
     #no such thing as protected methods in python
     # it is possible to duplicate. but is it needed?
     @abc.abstractclassmethod
     def compute_energy(self, x: np.ndarray) -> float:
-        m_neval = m_neval +1
+        self.m_neval = self.m_neval +1
         return None
     
-    @abc.abstractclassmethod
     def do_conf_tests(self, x: np.ndarray) -> bool:
-        return None
+        if (len(self.m_conf_tests) == 0 ):
+            print("no conf test specified")
+        i=0
+        while(i < len(self.m_conf_tests)) :
+            result: bool =  CheckSphericalContainer.conf_test(x)
+            if(result == False):
+                self.m_conf_reject_count = self.m_conf_reject_count + 1
+                return False
+            i= i+1
+        return True   
 
-    @abc.abstractclassmethod
+
     def do_accept_tests(self, xtrial: np.ndarray, etrial: float, xold: np.ndarray, eold: float ) -> bool:
-        return None
+        i=0
+        while(i < len(self.m_accept_tests) ):
+            result: bool =  MetropolisTest.test(xtrial, etrial, xold, eold, self.m_temperature) 
+            if(result == False):
+                self.m_E_reject_count = self.m_E_reject_count + 1
+                return False
+            i = i+1
+        return True  
 
-    @abc.abstractclassmethod
     def do_late_conf_test(self, x: np.ndarray) -> bool:
-        return None
+        if (len(self.m_conf_tests) == 0 ):
+            print("no conf test specified")
+        i=0
+        while(i < len(self.m_conf_tests)) :
+            result: bool =  CheckSphericalContainer.conf_test(x)
+            if(result == False):
+                self.m_conf_reject_count = self.m_conf_reject_count + 1
+                return False
+            i=i+1
+        return True 
 
     def do_actions(self, x: np.ndarray, energy: float, success: bool):
-        return None
+        i=0
+        while(i<len.(self.m_actions)):
+            action(x, energy, success)
+            i=i+1
     
     @abc.abstractclassmethod
     def take_steps(self):
         return None
+
+
 
 
     

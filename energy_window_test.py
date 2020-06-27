@@ -1,4 +1,4 @@
-from mc import *
+from template import *
 
 class EnergyWindowTest(AcceptTest):
     m_min_energy: float

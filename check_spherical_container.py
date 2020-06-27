@@ -1,4 +1,5 @@
-from mc import *
+
+from template import *
 
 
 class CheckSphericalContainer(ConfTest):
@@ -10,8 +11,8 @@ class CheckSphericalContainer(ConfTest):
         self.m_ndim = ndim
         return None 
 
-
-    def conf_test(self, trial_coords: np.ndarray) -> bool:
+    @staticmethod
+    def conf_test( trial_coords: np.ndarray) -> bool:
         N: size_t = len(trial_coords)
         r2: float = 0
         i: size_t = 0
@@ -20,10 +21,14 @@ class CheckSphericalContainer(ConfTest):
             while (j< i+self.m_ndim):
                 r2 = r2 + trial_coords[j]*trial_coords[j]
                 j = j+1
-            if (r2> m_radius2):
+            if (r2> self.m_radius2):
                 return False
-            i = i + m_ndim
+            i = i + self.m_ndim
         return True
+
+#from mc import *
+
+
 
 
 

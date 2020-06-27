@@ -1,5 +1,7 @@
-from mc import *
+#import mc
 import random
+#import abc
+from template import *
 
 class MetropolisTest(AcceptTest):
     m_seed: size_t
@@ -8,7 +10,8 @@ class MetropolisTest(AcceptTest):
     def __init__(self, rseed: size_t):
         self.rseed = rseed
     
-    def test(self, trial_coords, trial_energy: float, old_coords, old_energy: float, temperature: float):
+    @staticmethod
+    def test( trial_coords, trial_energy: float, old_coords, old_energy: float, temperature: float):
         w: float =None
         rand: float = None
         success: bool = True
@@ -20,11 +23,11 @@ class MetropolisTest(AcceptTest):
                 success= False
         return success
     @abc.abstractclassmethod
-    def get_seed() ->  size_t:
-        return m_seed
+    def get_seed(self) ->  size_t:
+        return self.m_seed
 
-    def set_generator_seed(inpt: float):
-        random.seed(inp)
+    def set_generator_seed(self, inpt: float):
+        random.seed(inpt)
 
 
 

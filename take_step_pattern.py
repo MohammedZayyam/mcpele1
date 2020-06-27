@@ -1,7 +1,7 @@
 from mc import *
  
 class TakeStepPattern(TakeStep):
-    m_steps: List[size_t] = None
+    m_steps: list = None
     m_step_storage: list  = None
 
     def add_step(self, step_input):
@@ -11,4 +11,4 @@ class TakeStepPattern(TakeStep):
         return None
 
     def report(self, old_coords, old_energy:float, new_coords, new_energy: float, success: bool):
-        
+

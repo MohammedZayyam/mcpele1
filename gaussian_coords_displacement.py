@@ -14,8 +14,8 @@ class GaussianTakeStep(TakeStep):
 
     def m_sample_normal_vec(self):
         i=0
-        while i < m_ndim:
-            m_normal_vec[i] = random.normalvariate(0, 1)
+        while i < self.m_ndim:
+            self.m_normal_vec[i] = random.normalvariate(0, 1)
             i +=1 
 
     def __init__(self, rseed: size_t, stepsize: float, ndim: size_t):
@@ -28,29 +28,28 @@ class GaussianTakeStep(TakeStep):
         return None
 
     def get_seed(self) -> size_t:
-        return m_seed
+        return self.m_seed
     
     def set_generator_seed(self, inp: size_t):
         random.seed(inp)
 
     def get_stepsize(self) -> float:
-        return m_stepsize
+        return self.m_stepsize
     
-    def set_stepsize(input: float):
-        m_stepsize = input
+    def set_stepsize(self, input: float):
+        self.m_stepsize = input
 
-    def get_count() -> size_t:
-        return m_count
+    def get_count(self) -> size_t:
+        return self.m_count
 
-    def set_count(input: size_t):
-        m_count = input
+    def set_count(self, input: size_t):
+        self.m_count = input
 
     @abc.abstractclassmethod
-    def expected_mean() -> float:
+    def expected_mean(self) -> float:
         return 0
 
-    @abc.abstractclassmethod
-    def expected_variance(ss: float) -> float:
+    def expected_variance(self, ss: float) -> float:
         return ss*ss
 
 class GaussianCoordsDisplacement(GaussianTakeStep):

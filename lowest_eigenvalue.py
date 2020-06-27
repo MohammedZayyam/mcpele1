@@ -1,4 +1,4 @@
-from mc import *
+from template import *
 class FindLowestEigenValue(abc.ABCMeta):
     m_lowesteigpot: list
     m_ranvec: np.ndarray
