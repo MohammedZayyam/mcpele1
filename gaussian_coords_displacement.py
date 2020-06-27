@@ -1,16 +1,16 @@
-from mc import *
+from template import *
 import random
 
 class GaussianTakeStep(TakeStep):
-    m_seed: size_t
-    m_mean: float
-    m_stdev: float
-    m_generator: float
-    m_distribution: float = random.normalvariate(0, 1)
-    stepsize: float
-    m_count: size_t
-    m_ndim: size_t
-    m_normal_vec: np.ndarray
+    m_seed: size_t=     None
+    m_mean: float =None
+    m_stdev: float =None
+    m_generator: float =None
+    m_distribution: float = random.normalvariate(0, 1) =None
+    stepsize: float =None
+    m_count: size_t =None
+    m_ndim: size_t =None
+    m_normal_vec: np.ndarray =None
 
     def m_sample_normal_vec(self):
         i=0
@@ -58,10 +58,19 @@ class GaussianCoordsDisplacement(GaussianTakeStep):
         self.rseed = rseed
         self.stepsize = stepsize
         self.ndim = ndim
-    
-    @abc.abstractclassmethod
-    def displace(coords: np.ndarray):
-        return None
+    @classmethod
+    def displace(cls, coords: np.ndarray):
+        cls.m_sample_normal_vec
+        cls.m_normal_vec = cls.m_normal_vec/np.linalg.norm(cls.m_normal_vec)
+        i=0
+        while(i<cls.m_ndim):
+            coords[i] = coords[i] +(cls.m_normal_vec[i] * cls.m_stepsize)
+            i=i+1
+        cls.m_count = cls.m_count +1
+
+
+
+
 
 class SampleGaussian(GaussianTakeStep):
 
@@ -71,6 +80,15 @@ class SampleGaussian(GaussianTakeStep):
         self.rseed = rseed
         self.stepsize = stepsize
         self.origin = origin
+    @classmethod
+    def displace(cls, coords: np.ndarray):
+        cls.m_sample_normal_vec
+        cls.m_normal_vec = cls.m_normal_vec/np.linalg.norm(cls.m_normal_vec)
+        i=0
+        while(i<cls.m_ndim):
+            coords[i] = coords[i] +(cls.m_normal_vec[i] * cls.m_stepsize)
+            i=i+1
+        cls.m_count = cls.m_count +1
     
 
 

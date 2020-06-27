@@ -1,6 +1,7 @@
 from template import *
 from check_spherical_container import *
 from metropolis_test import *
+from gaussian_coords_displacement import *
 #from check_spherical_container import *
 
 class MC(ABC):
@@ -161,7 +162,6 @@ class MC(ABC):
     def get_E_rejection_fraction(self) -> float:
         return self.m_E_reject_count/self.m_nitercount
 
-    @staticmethod
     def get_iterations_count(self) -> size_t:
         return self.m_nitercount
     
@@ -281,13 +281,13 @@ class MC(ABC):
 
     def do_actions(self, x: np.ndarray, energy: float, success: bool):
         i=0
-        while(i<len.(self.m_actions)):
+        while(i<len(self.m_actions)):
             action(x, energy, success)
             i=i+1
     
     @abc.abstractclassmethod
     def take_steps(self):
-        return None
+        self.m_take_step = GaussianCoordsDisplacement.displace(self.m_coords)
 
 
 
