@@ -1,35 +1,49 @@
 #adopted from adaptive take step.h
 from template import *
+#from mc import get_iterations_counts
 
 class AdaptiveTakeStep(TakeStep):
-    def __init__(self, m_interval: size_t, m_total_steps: size_t, m_accepted_steps: size_t, m_factor: float, 
-    m_min_acceptance_ratio: float, m_max_acceptance_ratio: float):
-    #protected variables
-        self.m_interval = m_interval
-        self.m_total_steps = m_total_steps
-        self.m_accepted_steps  = m_accepted_steps
-        self.m_factor = m_factor
-        self.m_min_acceptance_ratio = m_min_acceptance_ratio
-        self.m_max_acceptance_ratio = m_max_acceptance_ratio
+    m_interval: size_t = None
+    m_total_steps = None
+    m_accepted_steps = None
+    m_factor: float = None
+    m_min_acceptance_ratio = None
+    m_max_acceptance_ratio = None
+    def __init__(self):
+        self.m_interval = 100
+        self.m_total_steps = 0
+        self.m_accepted_steps = 0
+        self.m_factor = 0.9
+        self.m_min_acceptance_ratio = 0.2
+        self.m_max_acceptance_ratio = 0.5
+        try:
+            self.m_factor <=0 or self.m_factor >=1
+        except:
+            print("AdaptiveTakeStep::AdaptiveTakeStep: input factor has illegal value")\
 
-    #methods
-    @abc.abstractclassmethod
-    def get_min_acceptance_ratio(self):
-        return self.m_min_acceptance_ratio
-    
-    @abc.abstractclassmethod
-    def get_max_acceptance_ration(self):
-        return self.m_max_acceptance_ratio
-    
-    @abc.abstractclassmethod
-    def get_counters(self, counters: List[size_t]) ->List[size_t]:
-        counters[0] = self.m_total_steps
-        counters[1] = self.m_accepted_steps
-        return counters
-    
-    @abc.abstractclassmethod
-    def set_counters(counter: List[size_t]):
-        self.m_total_steps = counters[0]
-        self.m_accepted_steps = counters[1]
-    
+    def report(self, old_coords, old_energy, new_coords, new_energy, success):
+        self.m_total_steps +=1
+        if(success):
+            self.m_accepted_steps +=1
+        if(get_iterations_counts()%self.m_accepted_steps==0):
+            acceptance_fraction = self.m_accepted_steps/self.m_total_steps
+            self.m_accepted_steps = 0
+            self.m_total_steps = 0
+            if(acceptance_fraction< self.m_min_acceptance_ratio):
+                RandomCoordsDisplacement.increase_acceptance(self.m_factor)
+            if(acceptance_fraction> self.m_min_acceptance_ratio):
+                RandomCoordsDisplacement.decrease_acceptance(self.m_factor)
+            
 
+class RandomCoordsDisplacement(TakeStep):
+    
+    m_step_size = None  
+    @staticmethod
+    def increase_acceptance(factor):
+        m_step_size *= factor
+    @staticmethod
+    def decrease_acceptance(factor):
+        m_step_size /= factor
+
+
+        

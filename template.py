@@ -4,7 +4,8 @@ from typing import NewType
 from typing import List
 import numpy as np
 import math 
-
+import time
+import datetime
 class Action(ABC):  
     def action(self, coords: np.ndarray, energy: float, accepted: bool):
         return None

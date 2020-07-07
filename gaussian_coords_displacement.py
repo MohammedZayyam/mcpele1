@@ -6,7 +6,7 @@ class GaussianTakeStep(TakeStep):
     m_mean: float =None
     m_stdev: float =None
     m_generator: float =None
-    m_distribution: float = random.normalvariate(0, 1) =None
+    #m_distribution: float = random.normalvariate(0, 1) =None
     stepsize: float =None
     m_count: size_t =None
     m_ndim: size_t =None

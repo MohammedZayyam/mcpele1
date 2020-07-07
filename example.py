@@ -8,14 +8,15 @@ import numpy as np
 import copy
 from scipy.special import gamma
 from mc import *
-from check_spherical_container import *
+from check_spherical_container_config import *
+from uniform_rectangle_sampling import *
 
 def volume_nball(radius, n):
     return np.power(np.pi, n / 2) * np.power(radius, n) / gamma(n / 2 + 1)
 
 def get_pi(accepted_fraction, ndim):
     return np.power(2 ** ndim * accepted_fraction * gamma(ndim / 2 + 1), 2 / ndim)
- """   
+"""
 class MC(MC):
     def set_temperature(self, temp):
         self.set_temperature(temp)
@@ -29,22 +30,23 @@ class ComputePi(object):
         #
         self.radius = 44
         self.potential = 0 #NullPotential()
-        self.mc = MC(self.potential, np.ones(self.ndim), 1, self.nsamples)
+        self.mc = MC(self.potential, np.ones(ndim), 1)
         self.step = UniformRectangularSampling(42, self.radius)
-        self.mc.set_takestep(self.step)
+        self.mc.set_take_step(self.step)
         self.mc.set_report_steps(0)
         self.conftest_check_spherical_container = CheckSphericalContainerConfig(self.radius)
+        #no problem till here
         self.mc.add_conf_test(self.conftest_check_spherical_container)
-        self.mc.set_print_progress()
-        self.mc.run()
+        self.mc.set_print_progress(False)
+        self.mc.run(nsamples)
         self.p = self.mc.get_accepted_fraction()
         self.pi = get_pi(self.p, self.ndim)
         
 if __name__ == "__main__":
-    nsamples = 1e5
+    nsamples = 10000
     ndim_ = []
     res = []
-    for ndim in xrange(2, 16):
+    for ndim in range(2, 5):
         print("computing pi in {} dimensions".format(ndim))
         c = ComputePi(ndim=ndim, nsamples=nsamples)
         res.append(c.pi)

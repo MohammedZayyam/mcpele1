@@ -12,7 +12,7 @@ class CheckSphericalContainer(ConfTest):
         return None 
 
     @staticmethod
-    def conf_test( trial_coords: np.ndarray) -> bool:
+    def conf_test(self, trial_coords: np.ndarray) -> bool:
         N: size_t = len(trial_coords)
         r2: float = 0
         i: size_t = 0
