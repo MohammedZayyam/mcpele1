@@ -7,9 +7,9 @@ a ball of radius R contained in the cube, we determine Pi.
 import numpy as np
 import copy
 from scipy.special import gamma
-from mc import *
-from check_spherical_container_config import *
-from uniform_rectangle_sampling import *
+from mcpele1.montecarlo.mc import MC
+from mcpele1.takestep.uniform_rectangle_sampling import UniformRectangularSampling
+from mcpele1.conftest.check_spherical_container_config import CheckSphericalContainerConfig
 
 def volume_nball(radius, n):
     return np.power(np.pi, n / 2) * np.power(radius, n) / gamma(n / 2 + 1)
@@ -37,7 +37,7 @@ class ComputePi(object):
         self.conftest_check_spherical_container = CheckSphericalContainerConfig(self.radius)
         #no problem till here
         self.mc.add_conf_test(self.conftest_check_spherical_container)
-        self.mc.set_print_progress(False)
+        self.mc.set_print_progress(True)
         self.mc.run(nsamples)
         self.p = self.mc.get_accepted_fraction()
         self.pi = get_pi(self.p, self.ndim)

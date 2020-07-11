@@ -1,4 +1,4 @@
-from template import *
+from mcpele1.montecarlo.template import *
 
 class Progress:
     m_inverse_of_total_itterations: float = None
@@ -12,8 +12,7 @@ class Progress:
         self.m_curr = 0
         self.m_prev = 0
         self.m_start_time = time.time()
-        print(self.m_start_time)
-        print(time.time())
+
     
     def get_current_percentage(self):
         return self.m_curr
@@ -25,7 +24,7 @@ class Progress:
             self.print_time_percentage(idx -1)
             if(self.m_curr == 100):
                 StopIteration
-    @classmethod
+
     def convertdatetimetoseconds(self, t):
         (h, m, s) = t.split(':')
         return int(h) * 3600 + int(m) * 60 + int(s)
@@ -33,15 +32,14 @@ class Progress:
     def print_time_percentage(self,smp):
         #update and print percentage complete
         print("{}%", self.m_curr)
+        self.m_prev = self.m_curr
         #get and print elapsed time
         #print("time :", self.m_start_time )
-        print("done :", time.time()-self.m_start_time )
+        print("time elapsed in seconds :", time.time()-self.m_start_time )
         #estimate and print time to complete
-        print("todo :", (self.m_total_itterations- smp - 1)/(smp + 1)*(time.time()- self.m_start_time))
+        print("time to completion in seconds :", (self.m_total_itterations- smp - 1)/(smp + 1)*(time.time()- self.m_start_time))
         #estimate and print time total time ot complete
-        print("total :", (self.m_total_itterations/(smp+1)*(time.time()- self.m_start_time)) )
+        print("total time in seconds :", (self.m_total_itterations/(smp+1)*(time.time()- self.m_start_time)) )
         #estimate and print total local completetion time
-        """
-        you have to do the last method
-
+        """you have to do the last method
         """

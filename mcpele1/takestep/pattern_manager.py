@@ -1,5 +1,5 @@
 #incomple
-from template import *
+from mcpele1.montecarlo.template import *
 from typing import NewType
 
 vec_t = NewType('vec_t', list)

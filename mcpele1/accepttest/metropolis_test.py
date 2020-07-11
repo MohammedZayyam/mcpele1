@@ -1,7 +1,6 @@
-#import mc
+from mcpele1.montecarlo.template import *
 import random
 #import abc
-from template import *
 
 class MetropolisTest(AcceptTest):
     m_seed: size_t

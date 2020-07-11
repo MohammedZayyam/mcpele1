@@ -1,6 +1,6 @@
 from template import *
 
-class RecordVectorTimeseries(mc.Action):
+class RecordVectorTimeseries(Action):
     m_record_every: mc.size_t = None
     m_eqsteps: mc.size_t = None
     m_time_series: np.ndarray = None
@@ -19,7 +19,7 @@ class RecordVectorTimeseries(mc.Action):
             print("error appending")
     @staticmethod
     def action( coords, energy: float, accepted: bool):
-        counter: size_t = .get_iterations_count()
+        counter: size_t = mc.get_iterations_count()
         if(counter % self.m_record_every == 0 & counter > self.m_eqsteps):
             self.m_record_vector_value(self.get_recorded_vector(coords, energy, accepted))
 

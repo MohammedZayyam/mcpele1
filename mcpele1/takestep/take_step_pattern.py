@@ -1,4 +1,4 @@
-from mc import *
+from mcpele1.montecarlo.template import *
  
 class TakeStepPattern(TakeStep):
     m_steps: list = None

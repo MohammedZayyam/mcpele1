@@ -1,5 +1,4 @@
-#adopted from adaptive take step.h
-from template import *
+from mcpele1.montecarlo.template import *
 #from mc import get_iterations_counts
 
 class AdaptiveTakeStep(TakeStep):

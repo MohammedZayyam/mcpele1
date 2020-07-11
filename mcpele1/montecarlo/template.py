@@ -6,6 +6,8 @@ import numpy as np
 import math 
 import time
 import datetime
+
+
 class Action(ABC):  
     def action(self, coords: np.ndarray, energy: float, accepted: bool):
         return None
@@ -50,3 +52,4 @@ class TakeStep(ABC):#define all the function
 size_t = NewType('size_t', int)
 #function(Log likilyh)
 Base_Potential = NewType('Base_Potential', float)
+#from check_spherical_container import *

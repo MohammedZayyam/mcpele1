@@ -1,5 +1,5 @@
-from template import *
-import check_spherical_container
+from mcpele1.montecarlo.template import *
+from mcpele1.conftest import check_spherical_container
 
 class ConfTestOR(ConfTest):
     m_tests: list = None

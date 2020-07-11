@@ -1,4 +1,4 @@
-from template import *
+from mcpele1.montecarlo.template import *
 import random
 
 class UniformRectangularSampling():
