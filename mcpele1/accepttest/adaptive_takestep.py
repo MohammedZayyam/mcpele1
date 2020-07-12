@@ -1,5 +1,4 @@
 from mcpele1.montecarlo.template import *
-#from mc import get_iterations_counts
 
 class AdaptiveTakeStep(TakeStep):
     m_interval: size_t = None

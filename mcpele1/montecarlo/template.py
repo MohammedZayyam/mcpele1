@@ -8,12 +8,14 @@ import time
 import datetime
 
 
-class Action(ABC):  
+class Action(ABC):
+    @abc.abstractmethod
     def action(self, coords: np.ndarray, energy: float, accepted: bool):
         return None
 
 class AcceptTest(ABC):
-    def test(self,  trialcoords: np.ndarray, energy: float, old_coords: np.ndarray, old_energy: float, temperature: float) -> bool:
+    @abc.abstractmethod
+    def test(self,  trial_energy, old_energy, temperature) -> bool:
         return None
 
 class ConfTest(ABC):
