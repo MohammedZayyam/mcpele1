@@ -1,10 +1,10 @@
 from mcpele1.montecarlo.template import *
 from mcpele1.montecarlo.progress import *
-
+import copy
 
 class MC(ABC):
     def __init__(self, potential_function, coords, temperature):
-        self.potential_function = potential_function
+        self.pot_func = potential_function
         self.coords = coords
         self.temperature = temperature
 
@@ -31,7 +31,10 @@ class MC(ABC):
         self.m_report_steps: size_t = 0  
         self.m_enable_input_warnings: bool = True
         self.counters: List[size_t] = None
+
+
     #public methods
+    
     def one_iteration(self):
         success = True
         
@@ -39,16 +42,14 @@ class MC(ABC):
         self.m_nitercount = self.m_nitercount +1
 
 
-        self.m_trial_coords = self.coords
+        self.m_trial_coords = copy.deepcopy(self.coords)  # not sure whether there is a better way
         self.m_take_step.displace(self.m_trial_coords)
-        
 
         success = self.do_conf_tests(self.m_trial_coords)
 
-
         if success:
             # if configuration test is successful, compute the trial energy
-            self.m_trial_energy = self.potential_function(self.m_trial_coords)
+            self.m_trial_energy = self.pot_func(self.m_trial_coords)
             # perform the acceptance test. Stop as soon as one fails
             success = self.do_accept_tests(self.m_trial_coords, self.m_trial_energy, self.coords, self.m_energy)
 
@@ -64,9 +65,8 @@ class MC(ABC):
         #     #AdaptiveTakeStep.report(self, self.m_coords, self.m_energy, self.m_trial_coords, self.m_trial_energy, success)
         # #if the step is accepted, copy the coordinates and energy
 
-            
         if success:
-            self.coords= self.m_trial_coords
+            self.coords= copy.deepcopy(self.m_trial_coords)
             self.m_energy = self.m_trial_energy
             self.m_accept_count= 1+ self.m_accept_count
     
@@ -74,8 +74,6 @@ class MC(ABC):
 
         self.do_actions(self.coords, self.m_energy, success)
 
-
-        
         self.m_last_success = success
 
 
@@ -169,7 +167,7 @@ class MC(ABC):
         return self.m_neval
 
     def get_potential(self):
-        return self.potential_function
+        return self.pot_func
 
     def take_step_specified(self) -> bool:
         if(self.m_take_step == None):
@@ -266,39 +264,36 @@ class MC(ABC):
         return True   
 
 
-    def do_accept_tests(self, xtrial: np.ndarray, etrial: float, xold: np.ndarray, eold: float ) -> bool:
-        try:
-            len(self.m_accept_tests) == 0
-            i=0
-            while(i < len(self.m_accept_tests) ):
-                result: bool =  self.m_accept_tests[i].test(xtrial, etrial, xold, eold, self.temperature) 
-                if(result == False):
-                    self.m_E_reject_count = self.m_E_reject_count + 1
-                    return False
-                i = i+1
-            return True  
-        except:
-            print("no accept test specified")
+    def do_accept_tests(self, xtrial, etrial, xold, eold):
+        for a_t in self.m_accept_tests:
+            result = a_t.test(etrial, eold, self.temperature)
+            
+            if result is False:
+                self.m_E_reject_count += 1
+                return False
 
-    def do_late_conf_test(self, x: np.ndarray) -> bool:
-        try:
-            i=0
-            len(self.m_conf_tests) == 0
-            while(i < len(self.m_conf_tests)) :
-                result: bool =  self.m_conf_tests[i].conf_test(x)
-                if(result == False):
-                    self.m_conf_reject_count = self.m_conf_reject_count + 1
-                    return False
-                i=i+1
-            return True 
-        except:
-            print("no config test specified")
-          
+        return True
+
+
+    def do_late_conf_test(self, x):
+        return True
+        # try:
+        #     i=0
+        #     len(self.m_conf_tests) == 0
+        #     while(i < len(self.m_conf_tests)) :
+        #         result: bool =  self.m_conf_tests[i].conf_test(x)
+        #         if(result == False):
+        #             self.m_conf_reject_count = self.m_conf_reject_count + 1
+        #             return False
+        #         i=i+1
+        #     return True 
+        # except:
+        #     print("no config test specified")
         
 
     def do_actions(self, x: np.ndarray, energy: float, success: bool):
-        for action in self.m_actions:
-            action(x, energy, success)
+        for act in self.m_actions:
+            act.action(x, energy, success, self)
 
 
     def take_step(self):
