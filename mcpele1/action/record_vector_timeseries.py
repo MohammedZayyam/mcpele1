@@ -1,4 +1,4 @@
-from template import *
+from mcpele1.montecarlo.template import Action
 
 class RecordVectorTimeseries(Action):
     m_record_every: mc.size_t = None
@@ -22,6 +22,8 @@ class RecordVectorTimeseries(Action):
         counter: size_t = mc.get_iterations_count()
         if(counter % self.m_record_every == 0 & counter > self.m_eqsteps):
             self.m_record_vector_value(self.get_recorded_vector(coords, energy, accepted))
+
+
 
     def get_recorded_vector(self, coords, energy: float, accpeted: bool ):
         return coords

@@ -22,6 +22,11 @@ class MC(MC):
         self.set_temperature(temp)
 """
 
+
+def nullpotential(coords):
+    return 0
+
+
 class ComputePi(object):
     def __init__(self, ndim=2, nsamples=1e4):
         #
@@ -29,7 +34,7 @@ class ComputePi(object):
         self.nsamples = nsamples
         #
         self.radius = 44
-        self.potential = 0 #NullPotential()
+        self.potential = nullpotential #NullPotential()
         self.mc = MC(self.potential, np.ones(ndim), 1)
         self.step = UniformRectangularSampling(42, self.radius)
         self.mc.set_take_step(self.step)

@@ -1,1 +1,2 @@
-from .record_vector_timeseries import RecordVectorTimeseries
+# from .record_vector_timeseries import RecordVectorTimeseries
+from .record_energy_time_series import RecordEnergyTimeSeries
