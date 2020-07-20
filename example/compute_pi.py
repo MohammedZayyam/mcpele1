@@ -23,8 +23,9 @@ class MC(MC):
 """
 
 
-def nullpotential(coords):
-    return 0
+class nullpotential():
+    def get_energy(self):
+        return 0
 
 
 class ComputePi(object):

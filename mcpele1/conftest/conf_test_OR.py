@@ -1,21 +1,19 @@
+#test this out
 from mcpele1.montecarlo.template import *
-from mcpele1.conftest import check_spherical_container
+from mcpele1.conftest.check_spherical_container import CheckSphericalContainer
 
 class ConfTestOR(ConfTest):
-    m_tests: list = None
+    tests: list = []
 
-    #check the variables for this method
-    @abc.abstractclassmethod
     def add_test(self, test_input):
-        self.m_tests.append(test_input)
+        self.tests.append(test_input)
 
-    @abc.abstractclassmethod
     def conf_test(self, trial_coords):
-        if (len(self.m_tests) == 0 ):
+        if (len(self.tests) == 0 ):
             print("no conf test specified")
         i=0
-        while(i < len(self.m_tests)) :
-            result: bool =  check_spherical_container.conf_test(trial_coords)
+        for test in self.tests:
+            result = test.conf_test(trial_coords)
             if(result):
                 return True
         return False

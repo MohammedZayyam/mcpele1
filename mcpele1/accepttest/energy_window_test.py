@@ -1,8 +1,9 @@
-from mcpele1.montecarlo.template import *
+from mcpele1.montecarlo.template import AcceptTest
 
 class EnergyWindowTest(AcceptTest):
-    m_min_energy: float
-    m_max_energy: float
+    min_energy: float
+    max_energy: float
+    
     def __init__(self, min_energy: float, max_energy: float):
         self.min_energy = min_energy
         self.max_energy = max_energy

@@ -14,8 +14,7 @@ class RecordEnergyTimeSeries(Action):
     def action(self, coords, energy, accepted, mcrunner):
         niter = mcrunner.get_iterations_count()
         if (niter > self.startsteps and niter % self.record_every == 0):
-            self.energylist.append(energy)
-        
+            self.energylist.append(energy)     
 
     def get_energy_time_series(self):
         return self.energylist

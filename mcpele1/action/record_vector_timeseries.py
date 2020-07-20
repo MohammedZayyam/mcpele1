@@ -1,11 +1,13 @@
-from mcpele1.montecarlo.template import Action
-
+from mcpele1.montecarlo.template import Action, np
+"""
+Records vector time series, every m_record_every-th(variable) step
+"""
 class RecordVectorTimeseries(Action):
-    m_record_every: mc.size_t = None
-    m_eqsteps: mc.size_t = None
-    m_time_series: np.ndarray = None
+    m_record_every=1 
+    m_eqsteps=0
+    m_time_series: np.ndarray = []
 
-    def __init__(self, record_every: mc.size_t, eqsteps: mc.size_t ):
+    def __init__(self, record_every, eqsteps):
         self.m_record_every = record_every
         self.m_eqsteps = eqsteps
         if(record_every == 0):
@@ -17,11 +19,11 @@ class RecordVectorTimeseries(Action):
             self.m_time_series.append(input)
         except:
             print("error appending")
-    @staticmethod
-    def action( coords, energy: float, accepted: bool):
-        counter: size_t = mc.get_iterations_count()
+
+    def action( self, coords, energy: float, accepted: bool, mcrunner):
+        counter = mcrunner.get_iterations_count()
         if(counter % self.m_record_every == 0 & counter > self.m_eqsteps):
-            self.m_record_vector_value(self.get_recorded_vector(coords, energy, accepted))
+            self.m_record_vector_value(mcrunner.get_recorded_vector(coords, energy, accepted))
 
 
 
@@ -29,11 +31,14 @@ class RecordVectorTimeseries(Action):
         return coords
 
     def get_timeseries(self) ->  np.ndarray:
+        """
+        get a tragectory of at what steps in the simulation to record the vectors
+        """
         return self.m_time_series
 
     def clear(self):
-        self.m_time_series.delete()
+        self.m_time_series= []
 
-    def get_record_every(self) ->mc.size_t:
+    def get_record_every(self):
         return self.m_record_every
     

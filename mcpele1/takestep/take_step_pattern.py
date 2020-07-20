@@ -1,14 +1,36 @@
-from mcpele1.montecarlo.template import *
- 
-class TakeStepPattern(TakeStep):
-    m_steps: list = None
-    m_step_storage: list  = None
-
-    def add_step(self, step_input):
-        self.m_steps.append(step_input)
+from mcpele1.montecarlo.template import TakeStep
+from mcpele1.takestep.pattern_manager import PatternManager
+from typing import List
     
-    def displace(self, coords):
-        return None
+class TakeStepPattern(TakeStep):
+    """Takes multiple steps in a repeated pattern
 
-    def report(self, old_coords, old_energy:float, new_coords, new_energy: float, success: bool):
+    Python interface for c++ TakeStepPattern. This move
+    takes multiple steps in a repeated deterministic pattern.
 
+    .. warning:: breaks detailed balance locally
+    """
+    steps = PatternManager()
+    step_storage: List[TakeStep]  = []
+
+    def add_step(self, step_input, repetitions_input):
+        """add a step to a pattern
+
+        Parameters
+        ----------
+        step : :class:`TakeStep`
+            object of class :class:`TakeStep` constructed beforehand
+        nr_repetitions: int
+            number of Monte Carlo iterations in a row for which this
+            move is performed
+        """
+        self.steps.add( len(self.step_storage), repetitions_input)
+        self.step_storage.append(step_input) 
+        
+    def displace(self, coords, mcrunner):
+        #self.step_storage[self.steps.get_index()].displace(coords)
+        self.steps.increment()
+        self.step_storage[self.steps.get_index()].displace(coords, mcrunner)
+
+    #do other stuff
+    
