@@ -13,7 +13,7 @@ script:
   - python calculate_option_price.py
   - cd
   - cd test
-  - cd test_take_step_probability.py
+  - python test_take_step_probability.py
 
 
 notifications:
