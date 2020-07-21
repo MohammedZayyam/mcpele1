@@ -60,6 +60,7 @@ class MC(ABC):
         self.report_steps = 0  
         self.enable_input_warning = True
         self.counters = []
+        self.print_progress = False
     
     def one_iteration(self):
         """perform a single iteration of the MC loop

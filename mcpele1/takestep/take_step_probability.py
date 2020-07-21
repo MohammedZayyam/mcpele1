@@ -36,14 +36,14 @@ class TakeStepProbability(TakeStep):
         weight: double
             weight to assign to each move
         """
-        print("weight_input", weight_input)
+        #print("weight_input", weight_input)
         self.steps.append(step_input)
         self.weights.append( weight_input)
         sum_weights = np.sum(np.array(self.weights))
         self.probability.clear()
         for i in range(0, len(self.weights)):
             self.probability.append((self.weights[i])/sum_weights)
-        print("here", self.probability)
+        #print("here", self.probability)
         
     def displace(self, coords, mcrunner):
         """ displace the coords according to the Takesteps choosen by randomvalues
@@ -56,6 +56,7 @@ class TakeStepProbability(TakeStep):
         mcrunner: :class 'MC'
             the Base Monte Carlo class initialized object
         """
+        try:
             len(self.steps) == 0
         except:
             print("there are no Takesteps added to TakeStepProbability")

@@ -36,7 +36,7 @@ class PatternManager:
         new = [repetitions_input, index_input]
         
         self.step_repetitions.append(new)
-        print(self.step_repetitions)
+        #print(self.step_repetitions)
         self.current_step_index = 0
         self.current_step_count =self.step_repetitions[0][0]
         #print(self.step_repetitions[0][0])
