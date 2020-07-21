@@ -43,7 +43,7 @@ class ComputePi(object):
         self.conftest_check_spherical_container = CheckSphericalContainerConfig(self.radius)
         #no problem till here
         self.mc.add_conf_test(self.conftest_check_spherical_container)
-        self.mc.set_print_progress(True)
+        self.mc.set_print_progress(False)
         self.mc.run(nsamples)
         self.p = self.mc.get_accepted_fraction()
         self.pi = get_pi(self.p, self.ndim)
