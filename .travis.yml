@@ -4,6 +4,9 @@ version:
 
 cache: pip
 
+before_install:
+  - "export PYTHONPATH=$PYTHONPATH:$(pwd)"
+
 install:
   - pip install -r requirements.txt
 
