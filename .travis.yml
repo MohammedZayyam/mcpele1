@@ -10,6 +10,10 @@ install:
 script:
   - cd example
   - python compute_pi.py
+  - python calculate_option_price.py
+  - cd
+  - cd test
+  - cd test_take_step_probability.py
 
 
 notifications:
