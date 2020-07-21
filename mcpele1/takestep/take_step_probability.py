@@ -46,11 +46,21 @@ class TakeStepProbability(TakeStep):
         print("here", self.probability)
         
     def displace(self, coords, mcrunner):
-        try:    
+        """ displace the coords according to the Takesteps choosen by randomvalues
+        with probabilities
+
+        Paramters
+        ---------
+        coords: NumPy array
+            coordinates
+        mcrunner: :class 'MC'
+            the Base Monte Carlo class initialized object
+        """
             len(self.steps) == 0
         except:
             print("there are no Takesteps added to TakeStepProbability")
         stepstemp = np.random.choice(self.steps, 1, p=np.array(self.probability))
-        #print(stepstemp[0].get_stepsize())
         stepstemp[0].displace(coords, mcrunner)
+
+        #more to do
     

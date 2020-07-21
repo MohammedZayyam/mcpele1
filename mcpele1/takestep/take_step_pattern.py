@@ -28,7 +28,6 @@ class TakeStepPattern(TakeStep):
         self.step_storage.append(step_input) 
         
     def displace(self, coords, mcrunner):
-        #self.step_storage[self.steps.get_index()].displace(coords)
         self.steps.increment()
         self.step_storage[self.steps.get_index()].displace(coords, mcrunner)
 

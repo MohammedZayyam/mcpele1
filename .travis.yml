@@ -1,0 +1,22 @@
+language: python
+version:
+  - "3.8"
+
+cache: pip
+
+install:
+  - pip install -r requirements.txt
+
+script:
+    -cd example
+    -python calculate_option_price.py
+    -python compute_pi.py
+    -cd
+    -cd test
+    -python test_take_step_probability.py
+
+notifications:
+  email:
+    recipients:
+      - zayya002@umn.edu
+  
