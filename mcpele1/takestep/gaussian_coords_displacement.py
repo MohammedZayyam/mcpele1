@@ -153,7 +153,7 @@ class SampleGaussian(GaussianTakeStep):
         self.stepsize = stepsize
         self.origin = origin
    
-    def displace(self, coords: np.ndarray):
+    def displace(self, coords: np.ndarray, mcrunner):
         self.m_sample_normal_vec()
         self.normal_vec = self.normal_vec/np.linalg.norm(self.normal_vec)
         i=0
@@ -161,6 +161,7 @@ class SampleGaussian(GaussianTakeStep):
             coords[i] = coords[i] +(self.normal_vec[i] * self.m_stepsize)
             i=i+1
         self.count = self.count +1
+        mcrunner.trial_coords = coords
     
 
 

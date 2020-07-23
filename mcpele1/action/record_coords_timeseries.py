@@ -92,13 +92,12 @@ class RecordsCoordsTimeSeries(RecordVectorTimeseries):
     def action(self, coords, energy, accepted, mcrunner):
         try:
             len(coords) == self.ndof
-            counter = mcrunner.get_iteration
+            counter = mcrunner.get_iterations_count()
             if(counter>self.m_eqsteps):
                 self.update_mean_coord_vector(coords)
                 if(counter %self.m_record_every == 0):
                     #is this an extra bit of code?
                     self.m_record_vector_value(self.get_recorded_vector(coords, energy, accepted))
-
         except:
             print("ndof and coords have different size")
     

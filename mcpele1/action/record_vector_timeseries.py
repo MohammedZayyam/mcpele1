@@ -3,6 +3,20 @@ from mcpele1.montecarlo.template import Action, np
 Records vector time series, every m_record_every-th(variable) step
 """
 class RecordVectorTimeseries(Action):
+    """Record a trajectory of the system coordinates
+       
+    This class is the Python interface for the c++ bv::RecordCoordsTimeseries 
+    :class:`Action` class implementation.
+    
+    Parameters
+    ----------
+    ndof : int
+        dimensionality of coordinate array
+    record_every : int
+        interval every which the coordinates are recorded
+    eqsteps : int
+        number of equilibration steps to skip when computing averages
+    """
     m_record_every=1 
     m_eqsteps=0
     m_time_series: np.ndarray = []
