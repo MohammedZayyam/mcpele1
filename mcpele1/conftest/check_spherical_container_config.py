@@ -1,4 +1,4 @@
-from mcpele1.montecarlo.template import *
+from mcpele1.montecarlo.template import ConfTest, np
 
 class CheckSphericalContainerConfig(ConfTest):
     """Check that the system is within a spherical container
@@ -20,7 +20,7 @@ class CheckSphericalContainerConfig(ConfTest):
     
         Parameters
         ----------
-        trial_coords : NumPy Array
+        trial_coords: NumPy Array
             'coords' of the system
         
         Return

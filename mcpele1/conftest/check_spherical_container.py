@@ -1,4 +1,4 @@
-from mcpele1.montecarlo.template import *
+from mcpele1.montecarlo.template import ConfTest, np
 
 
 class CheckSphericalContainer(ConfTest):
@@ -12,10 +12,10 @@ class CheckSphericalContainer(ConfTest):
         dimensionality of the space (box dimensionality)
     """
     
-    m_radius2: float = None
-    ndim: size_t = None
+    m_radius2: float = 0
+    ndim = 0
     
-    def __init__(self, radius: float, ndim: size_t):
+    def __init__(self, radius: float, ndim):
         self.m_radius2 = radius
         self.ndim = ndim
         return None 

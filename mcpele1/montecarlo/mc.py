@@ -85,7 +85,7 @@ class MC(ABC):
             success = self.do_late_conf_test(self.trial_coords)
         # if the step is accepted, copy the coordinates and energy
         if success:
-            #self.coords= np.zeros(len(self.coords))#copy.deepcopy(self.trial_coords)
+            self.coords = self.trial_coords
             self.energy = self.trail_energy
             self.accept_count+=1
         #perform the actions on the new configurations
@@ -234,7 +234,9 @@ class MC(ABC):
             associated energy with coords
         """
         self.coords = coords
+        self.trial_coords = coords
         self.energy = energy
+        self.trail_energy = energy
 
     def get_energy(self) -> float:
         """get the energy
