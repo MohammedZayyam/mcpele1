@@ -17,10 +17,9 @@ script:
   - cd -
   - cd test
   - python test_take_step_probability.py
-
+  - python test_conf_test_OR.py
+  - python test_record_coords_timeseries.py
 
 notifications:
-  email:
-    recipients:
-      - zayya002@umn.edu
+  slack: 'zayya002:<token>'
   
