@@ -1,15 +1,11 @@
 language: python
 version:
-  - "3.8"
-
+- '3.8'
 cache: pip
-
 before_install:
-  - "export PYTHONPATH=$PYTHONPATH:$(pwd)"
-
+- export PYTHONPATH=$PYTHONPATH:$(pwd)
 install:
-  - pip install -r requirements.txt
-
+- pip install -r requirements.txt
 script:
   - cd example
   - python compute_pi.py
@@ -21,5 +17,9 @@ script:
   - python test_record_coords_timeseries.py
 
 notifications:
-  slack: 'zayya002:<token>'
-  
+  email:
+    recipients:
+    - zayya002@umn.edu
+    - surya031@umn.edu
+  slack:
+    secure: SM0p59hsjBJyGEonVm73/X2OpRsQVUMxztDRhiV7YAO4PjkhuOBY9KAN65Vv1O4SyMXS1ycM0BjnkGQj4LrivP8Y6LGYg1GX7GNXRKWC3/TK5UucXbpzhYZgWDYqkr/V+CAHum7XOQimdRRwOkwjVQGKYP/o80Xgv/SbxWKCabWFpq/6GW7tdT9Ns7CgNG0VELbJvEYCNHpWKj4DlWWmYl/34Z+W4lXxh7EY37ialjvOlDhj7rRSfCF24/BzPwNDa7nlcSDjJoZXThJUaplo+U1MTAaF0lMxeiABEx2THR7HaX3ojif2QdMnJFouZ9j45vc5fult7ZXb4mMmEgC+q/IlKtJJ8FTiuHPuWWtba0fRcmAN0vGMk40dt/2Wbo0DtTG3LM3Lvc9xsjXZsL9Kfo0lMHyQXnnkty7J7q3nrZDyS5Bopac14pdJ3e8G3IUeHw+N9IQyTZbb6ebs7D+iuCpV0xz2PW+qm+wNAuLVXX8LtrQGuOtbndlsqY2XbNZJcgeIe6CMtdygV2IehuVRCrxkgL/WiqStdN1TyNkfFdWctDhpDusCWjvs3fHeTaqiTh3kBTAsdq7vZLgpmAp/3CHy5GfGXyY5Q6IdS85D6Ik5q3LsbU+xcCvPjoseERXZxBb32PR0fdwBnF6uKFx0k1yVwCylAaZ7zshZ+b4xr3k=
