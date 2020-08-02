@@ -3,7 +3,7 @@ from abc import ABC
 from typing import NewType
 from typing import List
 import numpy as np
-import math 
+import math
 import time
 import datetime
 
@@ -24,7 +24,7 @@ class ConfTest(ABC):
         return None
 
 
-class TakeStep(ABC):#define all the function
+class TakeStep(ABC):
     @abc.abstractmethod 
     def displace(self, coords):
         return None

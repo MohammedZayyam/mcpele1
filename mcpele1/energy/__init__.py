@@ -1,0 +1,1 @@
+from .base_potential import Model

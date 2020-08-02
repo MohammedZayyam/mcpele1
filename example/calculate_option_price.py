@@ -3,11 +3,15 @@ from mcpele1.montecarlo.template import np
 from mcpele1.montecarlo.mc import MC
 from mcpele1.takestep.gaussian_coords_displacement import SimpleGaussian
 from mcpele1.action.record_energy_time_series import RecordEnergyTimeSeries
+from mcpele1.energy import Model
 
 """
 create a Option class to define the potential of the Monte Carlo simulation
 """
-#potential
+
+
+# potential
+
 class Option:
     def __init__(self, stock_price, strike_price, risk, volatility, tenor, CorP, Steps):
         self.S= stock_price
@@ -58,12 +62,9 @@ class Option_Price:
 
 if __name__ == "__main__":
     optprc = Option_Price()
-    energy_l =optprc.energy_list
+    energy_l = optprc.energy_list
     #Substract with stock price and remove all negatives
     energy_l = energy_l - optprc.K
     energy_l[energy_l<0]=0
     ans = np.sum(energy_l)/optprc.samples*math.exp(-optprc.r*optprc.T )
     print("option price:",ans )
-
-
-
