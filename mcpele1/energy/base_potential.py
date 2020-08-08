@@ -7,10 +7,9 @@ import abc
 
 class Model(abc.ABC):
     """ Abstract Base class for Models over which monte carlo simulations can be run
-
     """
     @abc.abstractmethod
-    def get_energy(self, coords, changed_coords=None):
+    def get_energy(self, coords):
         """ returns energy can either submit new coordinates in which case the parameter set is 
             coords = present coords
             changed_coords = None

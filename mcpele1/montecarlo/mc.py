@@ -61,7 +61,8 @@ class MC(ABC):
         self.enable_input_warning = True
         self.counters = []
         self.print_progress = False
-    
+        self.use_changed_coords= False
+
     def one_iteration(self):
         """perform a single iteration of the MC loop
         1. starts with displacing the coords with :class 'TakeStep'
@@ -79,7 +80,10 @@ class MC(ABC):
         self.take_step()  
         success = self.do_conf_tests(self.trial_coords)
         if success:
-            self.trail_energy = self.compute_energy(self.trial_coords)
+            if self.use_changed_coords == False: #not using chandged coords
+                self.trial_energy = self.compute_energy(self.trial_coords)
+            else:# using changed coords
+                self.trail_energy = self.energy + self.compute_energy(self.trial_coords)
             success = self.do_accept_tests(self.trial_coords, self.trail_energy, self.coords, self.energy)
         if success:
             success = self.do_late_conf_test(self.trial_coords)
@@ -434,6 +438,14 @@ class MC(ABC):
         """enables display of progress bar for MC simulation"""
         self.print_progress = input
 
+    def set_change_coords(self, input:bool):
+        """ use of change in coords in takestep and compute energy for increased speed"""
+        self.use_changed_coords = input
+
+    def get_change_coords(self):
+        """return if the changed coords has been set"""
+        print(self.use_changed_coords)
+
     def get_print_progress(self):
         """returns whether the 'print_progress' is set
 
@@ -527,7 +539,10 @@ class MC(ABC):
             The energy/potential from the :class 'Potential' method od 'get_energy'
         """ 
         self.neval += 1
-        return self.pot_func.get_energy(x)  
+        if self.use_changed_coords == False:
+            return self.pot_func.get_energy(x, self)
+        else:
+            return self.pot_funct.get_change_energy(x, self)
     
     def do_conf_tests(self, x: np.ndarray) -> bool:
         """Performs the configurations tests specified for the beginning of the 
@@ -616,7 +631,11 @@ class MC(ABC):
 
     def take_step(self):
         """Performs function 'displace' in the :class 'TakeStep'"""
-        self.take_steps.displace(self.trial_coords, self)
+        if self.use_changed_coords == False:
+            self.take_steps.displace(self.trial_coords, self)
+        else:
+            self.take_steps.displace_change(self.trial_coords, self)
+
 
 
     
