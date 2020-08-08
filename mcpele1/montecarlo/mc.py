@@ -540,9 +540,9 @@ class MC(ABC):
         """ 
         self.neval += 1
         if self.use_changed_coords == False:
-            return self.pot_func.get_energy(x, self)
+            return self.pot_func.get_energy(x)
         else:
-            return self.pot_funct.get_change_energy(x, self)
+            return self.pot_funct.get_change_energy(x)
     
     def do_conf_tests(self, x: np.ndarray) -> bool:
         """Performs the configurations tests specified for the beginning of the 
