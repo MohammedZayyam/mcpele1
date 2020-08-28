@@ -21,10 +21,13 @@ class UniformRectangularSampling():
     dist05 =None
     boxvec: np.ndarray = None
     cubic: bool = None
+    old_coords = 0
+    new_coords = 0
     def __init__(self, seed, boxvec):
         self.gen= seed
         random.seed(seed)
         self.dist05 = random.uniform(-0.5, 0.5)
+
         if  (isinstance(boxvec, np.ndarray)):
             self.boxvec =  boxvec
         else:
@@ -36,6 +39,7 @@ class UniformRectangularSampling():
         self.gen = inp
 
     def displace(self, coords, mcrunner):
+        self.old_coords = coords
         if(len(coords) %len(self.boxvec)):
             print("error")
         mr_particle = len(coords)/len(self.boxvec)
@@ -51,3 +55,7 @@ class UniformRectangularSampling():
                 k= k+1
             i = i+ 1
         mcrunner.trial_coords = coords
+        self.new_coords = coords
+    
+    def get_changed_coords(self):
+         return self.old_coords - self.new_coords

@@ -80,10 +80,7 @@ class MC(ABC):
         self.take_step()  
         success = self.do_conf_tests(self.trial_coords)
         if success:
-            if self.use_changed_coords == False: #not using chandged coords
-                self.trial_energy = self.compute_energy(self.trial_coords)
-            else:# using changed coords
-                self.trail_energy = self.energy + self.compute_energy(self.trial_coords)
+            self.trial_energy = self.compute_energy(self.trial_coords)
             success = self.do_accept_tests(self.trial_coords, self.trail_energy, self.coords, self.energy)
         if success:
             success = self.do_late_conf_test(self.trial_coords)

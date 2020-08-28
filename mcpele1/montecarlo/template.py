@@ -41,8 +41,9 @@ class TakeStep(ABC):
     def decrease_acceptance(self):
         return None
     
-    def get_changed_coords_old(self) -> np.ndarray:
-        return np.ndarray
+    @abc.abstractmethod
+    def get_changed_coords(self):
+        raise NotImplementedError("Subclasses should implement this!")
 
 #dataa types
 size_t = NewType('size_t', int)

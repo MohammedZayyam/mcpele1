@@ -45,7 +45,7 @@ class UniformSphericalSampling(TakeStep):
         elif(len(self.origin)== len(coords)):
             i =0
             while(i< len(coords)):
-                coords[i] = origin[i] + (coords[i]*tmp)
+                coords[i] = self.origin[i] + (coords[i]*tmp)
                 i +=1
         else:
             print("Error: make sure the origin and coordinates have the same dimension")

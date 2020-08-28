@@ -1,1 +1,1 @@
-from .base_potential import Model
+from .base_potential import Base_Potential
