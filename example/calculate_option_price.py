@@ -3,7 +3,6 @@ from mcpele1.montecarlo.template import np
 from mcpele1.montecarlo.mc import MC
 from mcpele1.takestep.gaussian_coords_displacement import SimpleGaussian
 from mcpele1.action.record_energy_time_series import RecordEnergyTimeSeries
-from mcpele1.energy import Model
 
 """
 create a Option class to define the potential of the Monte Carlo simulation

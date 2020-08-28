@@ -41,7 +41,6 @@ class TakeStep(ABC):
     def decrease_acceptance(self):
         return None
     
-    @abc.abstractmethod
     def get_changed_coords(self):
         raise NotImplementedError("Subclasses should implement this!")
 

@@ -15,6 +15,7 @@ script:
   - python test_take_step_probability.py
   - python test_conf_test_OR.py
   - python test_record_coords_timeseries.py
+  - python test_changed_coords.py
 
 notifications:
   email:
