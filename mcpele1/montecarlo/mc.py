@@ -56,7 +56,7 @@ class MC(ABC):
         self.niter = 0
         self.neval = 0
         self.energy: float = 0 
-        self.trail_energy: float = 0 
+        self.trial_energy: float = 0 
         self.report_steps = 0  
         self.enable_input_warning = True
         self.counters = []
@@ -81,13 +81,13 @@ class MC(ABC):
         success = self.do_conf_tests(self.trial_coords)
         if success:
             self.trial_energy = self.compute_energy(self.trial_coords)
-            success = self.do_accept_tests(self.trial_coords, self.trail_energy, self.coords, self.energy)
+            success = self.do_accept_tests(self.trial_coords, self.trial_energy, self.coords, self.energy)
         if success:
             success = self.do_late_conf_test(self.trial_coords)
         # if the step is accepted, copy the coordinates and energy
         if success:
             self.coords = self.trial_coords
-            self.energy = self.trail_energy
+            self.energy = self.trial_energy
             self.accept_count+=1
         #perform the actions on the new configurations
         self.do_actions(self.coords, self.energy, success)
@@ -237,7 +237,7 @@ class MC(ABC):
         self.coords = coords
         self.trial_coords = coords
         self.energy = energy
-        self.trail_energy = energy
+        self.trial_energy = energy
 
     def get_energy(self) -> float:
         """get the energy
@@ -267,7 +267,7 @@ class MC(ABC):
             potential/energy of 'trial_coords'
         """
 
-        return self.trail_energy
+        return self.trial_energy
 
     def get_coords(self):
         """get the coordinates
@@ -536,10 +536,8 @@ class MC(ABC):
             The energy/potential from the :class 'Potential' method od 'get_energy'
         """ 
         self.neval += 1
-        if self.use_changed_coords == False:
-            return self.pot_func.get_energy(x)
-        else:
-            return self.pot_funct.get_change_energy(x)
+        return self.pot_func.get_energy(x, self)
+
     
     def do_conf_tests(self, x: np.ndarray) -> bool:
         """Performs the configurations tests specified for the beginning of the 

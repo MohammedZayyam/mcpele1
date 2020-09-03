@@ -10,7 +10,7 @@ class NoTakeStep:
         mcrunner.trial_coords = coords
 
 class NoPotential:
-    def get_energy( self, x):
+    def get_energy( self, x, mcrunner):
         return 1
 
 class TestConfTestOR(unittest.TestCase):

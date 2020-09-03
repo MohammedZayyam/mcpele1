@@ -23,6 +23,6 @@ class Base_Potential(abc.ABC):
             or coords = previous coords 
             changed_coords = changed_coords
         """
-        TakeStep=mcrunner.take_step
-        changed_coords= TakeStep.get_changed_coords()
-        
+    
+    def set_flag(self, input:bool):
+        self.use_changed_coords = input

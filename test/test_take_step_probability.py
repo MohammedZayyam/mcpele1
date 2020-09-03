@@ -25,7 +25,7 @@ class Harmonic:
         for i in range(0, len(x)):
             self.distance[i] = x[i] - self.origin[i]
     
-    def get_energy(self, x):
+    def get_energy(self, x, mcrunner):
         self.get_distance(x)
         return 0.5*self.k*np.dot(self.distance, self.distance)
 

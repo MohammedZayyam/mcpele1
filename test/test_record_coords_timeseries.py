@@ -10,7 +10,7 @@ class NoTakeStep:
 
 #return the energy as 1 everytime
 class NoPotential:
-    def get_energy(self, x):
+    def get_energy(self, x, mcrunner):
         return 1
 
 class TestRecordCoordsTimeSeries(unittest.TestCase):

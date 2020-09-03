@@ -21,7 +21,7 @@ class Option:
         self.CorP = CorP
         self.Steps = Steps#dimension
 
-    def get_energy(self, x):
+    def get_energy(self, x, mcrunner):
         deltaT = self.T/self.Steps
         y = self.S
         for i in range(0, len(x)):
