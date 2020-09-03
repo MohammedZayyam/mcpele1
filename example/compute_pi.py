@@ -24,7 +24,7 @@ class MC(MC):
 
 
 class nullpotential():
-    def get_energy(self, x, mcrunner):
+    def get_energy(self, x):
         return 0
 
 
