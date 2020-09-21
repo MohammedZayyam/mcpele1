@@ -2,9 +2,13 @@ import unittest
 from mcpele1.montecarlo.template import np
 from mcpele1.montecarlo.template import TakeStep
 from mcpele1.montecarlo.mc import MC
-from mcpele1.energy.base_potential import Base_Potential
+from mcpele1.energy.base_potential import BasePotential
 
-class Example_Potential(Base_Potential):    
+class ExamplePotential(BasePotential):
+    """ Harmonic oscillator in $N$d with the ability to calculate energy from the changed coordinate
+    """
+    def __init__(self, use_changed_coords=False):
+        self.use_changed_coords = use_changed_coords
 
     def get_energy(self, x, mcrunner):
         if self.use_changed_coords == False or mcrunner.niter ==1:
@@ -24,11 +28,11 @@ class Example_Potential(Base_Potential):
             old_energy = mcrunner.trial_energy
             y= Takestep.get_changed_coords()
             #boolean array of non-zero vectors
-            g= (np.square(y[y>0]))+ 2*old_coords[y>0]*y[y>0]
+            g= (np.square(y[y!=0]))+ 2*old_coords[y!=0]*y[y!=0]
             return g + old_energy
             
 
-class Example_TakeStep(TakeStep):
+class ExampleTakeStep(TakeStep):
     """
     displaces the y coordinate by 1
     """
@@ -57,18 +61,18 @@ class TestConfTestOR(unittest.TestCase):
         self.bdim = 2
         self.point: np.ndarray= [1, 1]
         self.temp = 1
-        self.potential = Example_Potential()
+        self.potential = ExamplePotential()
         self.nrsteps = 4
         self.mc = MC(self.potential, self.point, self.temp)
-        self.step = Example_TakeStep()
+        self.step = ExampleTakeStep()
         self.mc.set_take_step(self.step)
-        self.potential1 = Example_Potential()
+        self.potential1 = ExamplePotential()
         """
         flag for using changed coords is on in mc1 simulation
         """
         self.potential1.set_flag(True)
         self.mc1 = MC(self.potential1, self.point, self.temp)
-        self.step1 = Example_TakeStep()
+        self.step1 = ExampleTakeStep()
         self.mc1.set_take_step(self.step1)
         
 

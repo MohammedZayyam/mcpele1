@@ -5,7 +5,7 @@ import abc
 
 
 
-class Base_Potential(abc.ABC):
+class BasePotential(abc.ABC):
     """ Abstract Base class for Models over which monte carlo simulations can be run
     """
     
