@@ -24,5 +24,5 @@ class BasePotential(abc.ABC):
             changed_coords = changed_coords
         """
     
-    def set_flag(self, input:bool):
+    def set_changed_coords_flag(self, input:bool):
         self.use_changed_coords = input

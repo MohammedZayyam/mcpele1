@@ -11,6 +11,8 @@ class ExamplePotential(BasePotential):
         self.use_changed_coords = use_changed_coords
 
     def get_energy(self, x, mcrunner):
+        # niter is set to one because the numbering when the energy
+        # is calculated in the monte carlo step starts at 1
         if self.use_changed_coords == False or mcrunner.niter ==1:
             """
             energy when the flag for using changed coords is False
@@ -28,6 +30,8 @@ class ExamplePotential(BasePotential):
             old_energy = mcrunner.trial_energy
             y= Takestep.get_changed_coords()
             #boolean array of non-zero vectors
+            print(y)
+            print(y!=0)
             g= (np.square(y[y!=0]))+ 2*old_coords[y!=0]*y[y!=0]
             return g + old_energy
             
@@ -38,12 +42,12 @@ class ExampleTakeStep(TakeStep):
     """
     old_coords = 0
     new_coords = 0
-    x=  np.zeros(2) +[0, 1]
-    change_vector = np.zeros(2)
+    change = np.zeros(2) +[0, 1]
+
     def displace(self, coords, mcrunner):
         #print(coords)
         self.old_coords = coords
-        coords = coords+ self.x
+        coords = coords+ self.change
         mcrunner.trial_coords = coords
         #print(coords)
         self.new_coords = coords
@@ -70,7 +74,7 @@ class TestConfTestOR(unittest.TestCase):
         """
         flag for using changed coords is on in mc1 simulation
         """
-        self.potential1.set_flag(True)
+        self.potential1.set_changed_coords_flag(True)
         self.mc1 = MC(self.potential1, self.point, self.temp)
         self.step1 = ExampleTakeStep()
         self.mc1.set_take_step(self.step1)
@@ -83,9 +87,9 @@ class TestConfTestOR(unittest.TestCase):
         self.mc.run(self.nrsteps)
         self.TakeStep = self.mc.get_take_step()
         self.changed_coords=self.TakeStep.get_changed_coords()
-        self.x = np.zeros(2)+[0, 1]
-        print(self.changed_coords, self.x)
-        np.array_equal(self.changed_coords, self.x)
+        self.change = np.zeros(2)+[0, 1]
+        print(self.changed_coords, self.change)
+        np.array_equal(self.changed_coords, self.change)
 
     def test_2(self):
         """
