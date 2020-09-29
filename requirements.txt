@@ -2,3 +2,4 @@ numpy>=1.19.0
 abcplus  
 scipy>=1.5.0
 jupyterlab>=2.2.0
+matplotlib>3.0.0
