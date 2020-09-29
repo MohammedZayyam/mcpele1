@@ -7,21 +7,19 @@ from mcpele1.energy.base_potential import BasePotential
 class ExamplePotential(BasePotential):
     """ Harmonic oscillator in $N$d with the ability to calculate energy from the changed coordinate
     """
-    def __init__(self, use_changed_coords=False):
-        self.use_changed_coords = use_changed_coords
-
+    def __init__(self, use_change_in_energy=False):
+        self.use_change_in_energy = use_change_in_energy
     def get_energy(self, x, mcrunner):
         # niter is set to one because the numbering when the energy
         # is calculated in the monte carlo step starts at 1
-        if self.use_changed_coords == False or mcrunner.niter ==1:
+        if self.use_change_in_energy == False or mcrunner.niter ==1:
             """
-            energy when the flag for using changed coords is False
+            energy when the flag for using changed energy is False
             """
             print("iteration no:", mcrunner.niter)
             print("false", np.dot(x, x))
             return np.dot(x, x)
-            
-        if self.use_changed_coords == True:
+        if self.use_change_in_energy == True:
             """
             energy when the flag for using changed coords is True
             """

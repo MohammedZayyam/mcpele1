@@ -9,7 +9,7 @@ class BasePotential(abc.ABC):
     """ Abstract Base class for Models over which monte carlo simulations can be run
     """
     
-    use_changed_coords: bool = False
+    use_change_in_energy: bool = False
     """
     flag to decide if changed_coordinated from Take_Steps should
     be used to calculate the potential
@@ -25,4 +25,4 @@ class BasePotential(abc.ABC):
         """
     
     def set_changed_coords_flag(self, input:bool):
-        self.use_changed_coords = input
+        self.use_change_in_energy = input
