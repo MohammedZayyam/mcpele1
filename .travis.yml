@@ -10,7 +10,7 @@ script:
   - cd example
   - python compute_pi.py
   - python calculate_option_price.py
-  - jupyter nbconvert --execute ising.ipynb
+  - jupyter nbconvert --to notebook --execute ising.ipynb
   - cd ..
   - cd test
   - python test_take_step_probability.py
