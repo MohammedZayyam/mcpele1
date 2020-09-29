@@ -1,4 +1,4 @@
 numpy>=1.19.0
 abcplus  
 scipy>=1.5.0
-jupyterlab>=1.0.0
+jupyterlab>=2.2.0
