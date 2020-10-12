@@ -2,20 +2,24 @@ import unittest
 from mcpele1.montecarlo.template import np
 from mcpele1.montecarlo.template import TakeStep
 from mcpele1.montecarlo.mc import MC
-from mcpele1.energy.base_potential import Base_Potential
+from mcpele1.energy.base_potential import BasePotential
 
-class Example_Potential(Base_Potential):    
-
+class ExamplePotential(BasePotential):
+    """ Harmonic oscillator in $N$d with the ability to calculate energy from the changed coordinate
+    """
+    def __init__(self, use_change_in_energy=False):
+        self.use_change_in_energy = use_change_in_energy
     def get_energy(self, x, mcrunner):
-        if self.use_changed_coords == False or mcrunner.niter ==1:
+        # niter is set to one because the numbering when the energy
+        # is calculated in the monte carlo step starts at 1
+        if self.use_change_in_energy == False or mcrunner.niter ==1:
             """
-            energy when the flag for using changed coords is False
+            energy when the flag for using changed energy is False
             """
             print("iteration no:", mcrunner.niter)
             print("false", np.dot(x, x))
             return np.dot(x, x)
-            
-        if self.use_changed_coords == True:
+        if self.use_change_in_energy == True:
             """
             energy when the flag for using changed coords is True
             """
@@ -24,22 +28,24 @@ class Example_Potential(Base_Potential):
             old_energy = mcrunner.trial_energy
             y= Takestep.get_changed_coords()
             #boolean array of non-zero vectors
-            g= (np.square(y[y>0]))+ 2*old_coords[y>0]*y[y>0]
+            print(y)
+            print(y!=0)
+            g= (np.square(y[y!=0]))+ 2*old_coords[y!=0]*y[y!=0]
             return g + old_energy
             
 
-class Example_TakeStep(TakeStep):
+class ExampleTakeStep(TakeStep):
     """
     displaces the y coordinate by 1
     """
     old_coords = 0
     new_coords = 0
-    x=  np.zeros(2) +[0, 1]
-    change_vector = np.zeros(2)
+    change = np.zeros(2) +[0, 1]
+
     def displace(self, coords, mcrunner):
         #print(coords)
         self.old_coords = coords
-        coords = coords+ self.x
+        coords = coords+ self.change
         mcrunner.trial_coords = coords
         #print(coords)
         self.new_coords = coords
@@ -57,18 +63,18 @@ class TestConfTestOR(unittest.TestCase):
         self.bdim = 2
         self.point: np.ndarray= [1, 1]
         self.temp = 1
-        self.potential = Example_Potential()
+        self.potential = ExamplePotential()
         self.nrsteps = 4
         self.mc = MC(self.potential, self.point, self.temp)
-        self.step = Example_TakeStep()
+        self.step = ExampleTakeStep()
         self.mc.set_take_step(self.step)
-        self.potential1 = Example_Potential()
+        self.potential1 = ExamplePotential()
         """
         flag for using changed coords is on in mc1 simulation
         """
-        self.potential1.set_flag(True)
+        self.potential1.set_changed_coords_flag(True)
         self.mc1 = MC(self.potential1, self.point, self.temp)
-        self.step1 = Example_TakeStep()
+        self.step1 = ExampleTakeStep()
         self.mc1.set_take_step(self.step1)
         
 
@@ -79,9 +85,9 @@ class TestConfTestOR(unittest.TestCase):
         self.mc.run(self.nrsteps)
         self.TakeStep = self.mc.get_take_step()
         self.changed_coords=self.TakeStep.get_changed_coords()
-        self.x = np.zeros(2)+[0, 1]
-        print(self.changed_coords, self.x)
-        np.array_equal(self.changed_coords, self.x)
+        self.change = np.zeros(2)+[0, 1]
+        print(self.changed_coords, self.change)
+        np.array_equal(self.changed_coords, self.change)
 
     def test_2(self):
         """
