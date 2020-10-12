@@ -28,6 +28,15 @@ class TakeStepPattern(TakeStep):
         self.step_storage.append(step_input) 
         
     def displace(self, coords, mcrunner):
+        """ displace the coords according to the Takesteps defined by the pattern
+
+        Paramters
+        ---------
+        coords: NumPy array
+            coordinates
+        mcrunner: :class 'MC'
+            the Base Monte Carlo class initialized object
+        """
         self.steps.increment()
         self.step_storage[self.steps.get_index()].displace(coords, mcrunner)
 

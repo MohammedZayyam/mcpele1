@@ -1,7 +1,7 @@
 from mcpele1.montecarlo.template import TakeStep, np, abc, ABC
 import random
 
-class RandomCoordsDisplacement(ABC, TakeStep):
+class RandomCoordsDisplacement(TakeStep):
     stepsize: float = 0
     count: int = 0
     seed: int = 0
