@@ -8,6 +8,8 @@ from mpi4py import MPI
 import copy
 import logging
 from future.utils import with_metaclass
+from mcpele1.takestep.uniform_rectangle_sampling import UniformRectangularSampling
+
 
 class _MPI_Parallel_Tempering(with_metaclass(abc.ABCMeta, object)):
     """Abstract class for MPI Parallel Tempering calculations
@@ -194,11 +196,12 @@ class _MPI_Parallel_Tempering(with_metaclass(abc.ABCMeta, object)):
         #set configuration and temperature at which want to perform run
         self.mcrunner.set_config(np.array(self.config,dtype='d'), self.energy)
         #now run the MCMC walk
+        print("Here3", self.mcrunner.take_steps)
         self.mcrunner.run()
         #collect the results
         result = self.mcrunner.get_results()
-        self.energy = result.energy
-        self.config = np.array(result.coords,dtype='d')
+        self.energy = result[1]
+        self.config = result[0]
         if self.ptiter >= self.skip:
             self._attempt_exchange()
             #print and increase parallel tempering count and test convergence

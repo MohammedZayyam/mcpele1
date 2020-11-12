@@ -46,7 +46,7 @@ class MC(ABC):
         self.accept_tests: list = []
         self.conf_test: list = []
         self.late_conf_test: list =[]
-        self.take_steps = 0
+        self.take_steps= 0
         self.nitercount = 0
         self.accept_count = 0
         self.E_reject_count= 0
@@ -55,13 +55,14 @@ class MC(ABC):
         self.last_success: bool = True
         self.niter = 0
         self.neval = 0
-        self.energy: float = 0 
+        self.energy = 0 
         self.trial_energy: float = 0 
         self.report_steps = 0  
         self.enable_input_warning = True
         self.counters = []
         self.print_progress = False
         self.use_changed_coords= False
+        self.result = np.zeros(2)
 
     def one_iteration(self):
         """perform a single iteration of the MC loop
@@ -92,15 +93,20 @@ class MC(ABC):
         #perform the actions on the new configurations
         self.do_actions(self.coords, self.energy, success)
         self.last_success = success
+        print("Energy", self.energy)
 
     def run(self, max_iter):
         """perform ``niter`` iterations of the MC loop"""
+        print("Here 4", self.take_steps())
         self.check_input()
+        print("Here 5", self.take_steps())
         progress1 = Progress(max_iter)
+        print("Here 6", self.take_steps())
         while(self.niter< max_iter):
             self.one_iteration()
             if(self.print_progress):
                 progress1.next(self.niter)
+                print("Here 7", self.take_steps())
         self.niter = 0
 
     def set_temperature(self, T: float):
@@ -627,12 +633,41 @@ class MC(ABC):
     def take_step(self):
         """Performs function 'displace' in the :class 'TakeStep'"""
         if self.use_changed_coords == False:
+            print("Here2", self.take_steps)
             self.take_steps.displace(self.trial_coords, self)
         else:
             self.take_steps.displace_change(self.trial_coords, self)
 
+    def set_config(self, coords, energy):
+        """sets current configuration and its energy
+        
+        Parameters
+        ----------
+        coords : numpy.array
+            these are the initial coordinates for the system
+        energy : double
+            energy of coords
+        """
+        self.coords = coords
+        self.energy = energy
 
-
+    def get_results(self):
+        """Must return a result object, generally must contain at least final configuration and energy
+        
+        Returns
+        -------
+        res : :class:`Result <pele:pele.optimize.Result>` container
+            dictionary-like container typically containing 
+            coords and energy accessible via: 
+            
+            * res.coords
+            * res.energy
+        """
+        res = self.result
+        res[0] = self.get_coords()
+        res[1] = self.get_energy()
+        return res
+    
     
 
 

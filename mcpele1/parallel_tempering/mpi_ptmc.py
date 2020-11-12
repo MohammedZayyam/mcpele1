@@ -5,7 +5,7 @@ import numpy as np
 import random
 import os
 from mpi4py import MPI
-from mcpele.parallel_tempering import _MPI_Parallel_Tempering
+from mcpele1.parallel_tempering import _MPI_Parallel_Tempering
 import time
 import logging
 
@@ -204,7 +204,9 @@ class MPI_PT_RLhandshake(_MPI_Parallel_Tempering):
         self.T = self._scatter_single_value(self.Tarray)
         logging.debug("Temperature {}".format(self.T))
         self.mcrunner.set_control(self.T)
-        self.config, self.energy = self.mcrunner.get_config()
+        self.config = self.mcrunner.temperature
+        print(self.config)
+        self.energy = self.mcrunner.energy
         self._print_initialise()
         self.initialised = True
 
