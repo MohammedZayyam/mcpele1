@@ -93,20 +93,21 @@ class MC(ABC):
         #perform the actions on the new configurations
         self.do_actions(self.coords, self.energy, success)
         self.last_success = success
-        print("Energy", self.energy)
+
 
     def run(self, max_iter):
         """perform ``niter`` iterations of the MC loop"""
-        print("Here 4", self.take_steps())
+        #print("Here 4", self.take_steps())
         self.check_input()
-        print("Here 5", self.take_steps())
         progress1 = Progress(max_iter)
-        print("Here 6", self.take_steps())
+        #print("Here 6", self.take_steps(), self.take_steps)
         while(self.niter< max_iter):
+            #print("Here 6", self.take_steps(), self.take_steps)
             self.one_iteration()
+            #print("Here 7", self.take_steps())
             if(self.print_progress):
                 progress1.next(self.niter)
-                print("Here 7", self.take_steps())
+                
         self.niter = 0
 
     def set_temperature(self, T: float):
@@ -633,7 +634,7 @@ class MC(ABC):
     def take_step(self):
         """Performs function 'displace' in the :class 'TakeStep'"""
         if self.use_changed_coords == False:
-            print("Here2", self.take_steps)
+            #print("Here2", self.take_steps)
             self.take_steps.displace(self.trial_coords, self)
         else:
             self.take_steps.displace_change(self.trial_coords, self)

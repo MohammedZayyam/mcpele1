@@ -196,7 +196,6 @@ class _MPI_Parallel_Tempering(with_metaclass(abc.ABCMeta, object)):
         #set configuration and temperature at which want to perform run
         self.mcrunner.set_config(np.array(self.config,dtype='d'), self.energy)
         #now run the MCMC walk
-        print("Here3", self.mcrunner.take_steps)
         self.mcrunner.run()
         #collect the results
         result = self.mcrunner.get_results()
@@ -208,8 +207,9 @@ class _MPI_Parallel_Tempering(with_metaclass(abc.ABCMeta, object)):
             if (self.ptiter % self.pfreq == 0):
                 self.max_ptiter = self._test_convergence()
                 self._print_data()
-            if self.print_status:
-                self._print_status()
+            #if self.print_status:
+                #forw
+                #self._print_status()
         self.ptiter += 1
 
     def run(self):
@@ -224,7 +224,7 @@ class _MPI_Parallel_Tempering(with_metaclass(abc.ABCMeta, object)):
             if self.ptiter >= self.max_ptiter:
                 self.max_ptiter = self._test_convergence()
                 self._print_data()
-        self._print_status()
+        #self._print_status()
         self._print_exchanges()
         self._close_flush()
         logging.info('Terminated')

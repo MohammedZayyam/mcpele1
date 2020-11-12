@@ -38,11 +38,13 @@ class TestPTRun(unittest.TestCase):
                 t = float(s[len(pre):])
                 timel.append(t)
             max_t = np.amax(timel)
-            
+            #print("energy",ener)
             ener, hist = read_Visits(d + '/' + pre + '{}'.format(max_t))
+            print("energy",ener, hist)
             
             T = temperatures[i]
             
+            print(hist)
             average = np.average(ener, weights=hist)
                         
             average2 = np.average(np.square(ener), weights=hist)

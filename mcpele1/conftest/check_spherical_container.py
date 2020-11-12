@@ -33,17 +33,12 @@ class CheckSphericalContainer(ConfTest):
         Bool
             True if the conf condition is satistified, False if not
         """
-        N = len(trial_coords)
+        #N = len(trial_coords)
         r2: float = 0
         i =0
-        while (i<N):
-            j=i
-            while (j< i+self.ndim):
-                r2 = r2 + trial_coords[j]*trial_coords[j]
-                j = j+1
-            if (r2> self.m_radius2):
-                return False
-            i = i + self.ndim
+        r2 = np.inner(trial_coords, trial_coords)
+        if (r2> self.m_radius2):
+            return False
         return True
 
 #from mc import *

@@ -9,7 +9,9 @@ class Histogram():
         self.maximum = math.floor((maximum / bin) + 1) * bin
         self.bin = bin
         self.eps = sys.float_info.epsilon
+        print("max", maximum, "min", minimum, "bin", bin)
         self.N = int((maximum-minimum)/bin)
+        print("N", self.N)
         self.hist = np.zeros(self.N +1)
         self.niter = 0
         self.mean = 0
@@ -92,6 +94,8 @@ class Histogram():
             self.niter+= 1
         else:
             self.resize(E, i)
+    
+   
 
 
 
@@ -104,7 +108,15 @@ class RecordEnergyHistogram(Action):
             self.hist = Histogram(minimum, maximum, bin)
             self.eqsteps = eqsteps
             self.count = 0
-
+        
+        def get_bounds_val(self):
+            return self.hist.minimum, self.hist.maximum
+        
+        def get_mean_variance(self):
+            var = self.hist.get_variance()
+            mean = self.hist.get_mean()
+            return mean, var
+        
         def action(self, coords, energy, accepted, mcrunner):
             self.count  = mcrunner.get_iterations_count()
             if self.count > self.eqsteps:
